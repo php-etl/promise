@@ -1,0 +1,38 @@
+<?php
+
+namespace spec\Kiboko\Component\ETL\Promise;
+
+use Kiboko\Component\ETL\Promise\Deferred;
+use Kiboko\Component\ETL\Promise\DeferredInterface;
+use Kiboko\Component\ETL\Promise\Promise;
+use Kiboko\Component\ETL\Promise\PromiseInterface;
+use PhpSpec\ObjectBehavior;
+
+class DeferredSpec extends ObjectBehavior
+{
+    function it_is_initializable(PromiseInterface $promise)
+    {
+        $this->beConstructedWith($promise);
+        $this->shouldHaveType(Deferred::class);
+    }
+
+    function it_can_be_resolved(TestInvokable $invokable)
+    {
+        $this->beConstructedWith($promise = new Promise());
+        $invokable->__invoke('resolved')->shouldBeCalledOnce();
+
+        $this->then($invokable)->shouldReturnAnInstanceOf(DeferredInterface::class);
+
+        $promise->resolve('resolved');
+    }
+
+    function it_can_be_failed(TestInvokable $invokable)
+    {
+        $this->beConstructedWith($promise = new Promise());
+        $invokable->__invoke(new \Exception())->shouldBeCalledOnce();
+
+        $this->failure($invokable)->shouldReturnAnInstanceOf(DeferredInterface::class);
+
+        $promise->fail(new \Exception());
+    }
+}
