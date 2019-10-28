@@ -8,12 +8,13 @@ use Kiboko\Component\ETL\Promise\Promise;
 use Kiboko\Component\ETL\Promise\PromiseInterface;
 use PhpSpec\ObjectBehavior;
 
-class DeferredSpec extends ObjectBehavior
+final class DeferredSpec extends ObjectBehavior
 {
     function it_is_initializable(PromiseInterface $promise)
     {
         $this->beConstructedWith($promise);
         $this->shouldHaveType(Deferred::class);
+        $this->shouldHaveType(DeferredInterface::class);
     }
 
     function it_can_be_resolved(TestInvokable $invokable)

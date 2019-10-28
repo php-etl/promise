@@ -2,6 +2,9 @@
 
 namespace Kiboko\Component\ETL\Promise;
 
+/**
+ * @api
+ */
 interface DeferredInterface
 {
     public function then(callable $callback): DeferredInterface;

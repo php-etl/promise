@@ -2,7 +2,10 @@
 
 namespace Kiboko\Component\ETL\Promise;
 
-class Deferred implements DeferredInterface
+/**
+ * @api
+ */
+final class Deferred implements DeferredInterface
 {
     /** @var PromiseInterface */
     private $promise;

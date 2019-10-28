@@ -2,6 +2,9 @@
 
 namespace Kiboko\Component\ETL\Promise;
 
+/**
+ * @api
+ */
 class AlreadyResolvedPromise extends \RuntimeException
 {
 }

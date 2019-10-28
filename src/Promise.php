@@ -2,19 +2,25 @@
 
 namespace Kiboko\Component\ETL\Promise;
 
-class Promise implements PromiseInterface
+use Kiboko\Component\ETL\Promise\Resolution;
+
+/**
+ * @api
+ */
+final class Promise implements ResolvablePromiseInterface
 {
     /** @var callable */
     private $successCallbacks;
     /** @var callable */
     private $failureCallbacks;
-    /** @var bool */
-    private $isResolved;
+    /** @var Resolution\ResolutionInterface */
+    private $resolution;
 
     public function __construct()
     {
         $this->successCallbacks = [];
         $this->failureCallbacks = [];
+        $this->resolution = new Resolution\Pending();
     }
 
     public function defer(): DeferredInterface
@@ -24,6 +30,10 @@ class Promise implements PromiseInterface
 
     public function then(callable $callback): PromiseInterface
     {
+        if ($this->resolution instanceof Resolution\SuccessInterface) {
+            $callback($this->resolution->value());
+        }
+
         $this->successCallbacks[] = $callback;
 
         return $this;
@@ -31,6 +41,10 @@ class Promise implements PromiseInterface
 
     public function failure(callable $callback): PromiseInterface
     {
+        if ($this->resolution instanceof Resolution\FailureInterface) {
+            $callback($this->resolution->error());
+        }
+
         $this->failureCallbacks[] = $callback;
 
         return $this;
@@ -38,30 +52,53 @@ class Promise implements PromiseInterface
 
     public function resolve($value): void
     {
-        if ($this->isResolved === true) {
+        if (!$this->resolution instanceof Resolution\Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
+        $this->resolution = new Resolution\Success($value);
         foreach ($this->successCallbacks as $callback) {
-            $callback($value);
+            try {
+                $callback($value);
+            } catch (\Throwable $e) {
+                throw new \RuntimeException('A promise handler should not throw exceptions.', 0, $e);
+            }
         }
-        $this->isResolved = true;
     }
 
     public function fail(\Throwable $failure): void
     {
-        if ($this->isResolved === true) {
+        if (!$this->resolution instanceof Resolution\Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
+        $this->resolution = new Resolution\Failure($failure);
         foreach ($this->failureCallbacks as $callback) {
-            $callback($failure);
+            try {
+                $callback($failure);
+            } catch (\Throwable $e) {
+                throw new \RuntimeException('A promise handler should not throw exceptions.', 0, $e);
+            }
         }
-        $this->isResolved = true;
     }
 
     public function isResolved(): bool
     {
-        return $this->isResolved;
+        return !$this->resolution instanceof Resolution\Pending;
+    }
+
+    public function isSuccess(): bool
+    {
+        return $this->resolution instanceof Resolution\SuccessInterface;
+    }
+
+    public function isFailure(): bool
+    {
+        return $this->resolution instanceof Resolution\FailureInterface;
+    }
+
+    public function resolution(): Resolution\ResolutionInterface
+    {
+        return $this->resolution;
     }
 }
