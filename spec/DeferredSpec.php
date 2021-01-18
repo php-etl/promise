@@ -1,11 +1,11 @@
 <?php
 
-namespace spec\Kiboko\Component\ETL\Promise;
+namespace spec\Kiboko\Component\Promise;
 
-use Kiboko\Component\ETL\Promise\Deferred;
-use Kiboko\Component\ETL\Promise\DeferredInterface;
-use Kiboko\Component\ETL\Promise\Promise;
-use Kiboko\Component\ETL\Promise\PromiseInterface;
+use Kiboko\Component\Promise\Deferred;
+use Kiboko\Component\Promise\DeferredInterface;
+use Kiboko\Component\Promise\Promise;
+use Kiboko\Component\Promise\PromiseInterface;
 use PhpSpec\ObjectBehavior;
 
 final class DeferredSpec extends ObjectBehavior

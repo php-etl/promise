@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace spec\Kiboko\Component\ETL\Promise;
+namespace spec\Kiboko\Component\Promise;
 
 class TestInvokable
 {

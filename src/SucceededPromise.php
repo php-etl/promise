@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Promise;
+namespace Kiboko\Component\Promise;
 
-use Kiboko\Component\ETL\Promise\Resolution;
+use Kiboko\Component\Promise\Resolution;
 
 /**
  * @api

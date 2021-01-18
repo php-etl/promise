@@ -16,6 +16,6 @@ formatter.name: pretty
 stop_on_failure: true
 suites:
   metadata_suite:
-    namespace: Kiboko\Component\ETL\Promise
-    psr4_prefix: Kiboko\Component\ETL\Promise
+    namespace: Kiboko\Component\Promise
+    psr4_prefix: Kiboko\Component\Promise
     src_path: '%paths.config%'

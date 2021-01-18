@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Promise;
+namespace Kiboko\Component\Promise;
 
 /**
  * @api

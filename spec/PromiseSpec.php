@@ -1,12 +1,12 @@
 <?php
 
-namespace spec\Kiboko\Component\ETL\Promise;
+namespace spec\Kiboko\Component\Promise;
 
-use Kiboko\Component\ETL\Promise\AlreadyResolvedPromise;
-use Kiboko\Component\ETL\Promise\DeferredInterface;
-use Kiboko\Component\ETL\Promise\Promise;
-use Kiboko\Component\ETL\Promise\PromiseInterface;
-use Kiboko\Component\ETL\Promise\ResolvablePromiseInterface;
+use Kiboko\Component\Promise\AlreadyResolvedPromise;
+use Kiboko\Component\Promise\DeferredInterface;
+use Kiboko\Component\Promise\Promise;
+use Kiboko\Component\Promise\PromiseInterface;
+use Kiboko\Component\Promise\ResolvablePromiseInterface;
 use PhpSpec\ObjectBehavior;
 
 final class PromiseSpec extends ObjectBehavior

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Promise\Resolution;
+namespace Kiboko\Component\Promise\Resolution;
 
 /**
  * @internal

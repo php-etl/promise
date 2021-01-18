@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace spec\Kiboko\Component\ETL\Promise;
+namespace spec\Kiboko\Component\Promise;
 
-use Kiboko\Component\ETL\Promise\AlreadyResolvedPromise;
-use Kiboko\Component\ETL\Promise\DeferredInterface;
-use Kiboko\Component\ETL\Promise\FailedPromise;
-use Kiboko\Component\ETL\Promise\PromiseInterface;
-use Kiboko\Component\ETL\Promise\ResolvablePromiseInterface;
-use Kiboko\Component\ETL\Promise\SucceededPromise;
+use Kiboko\Component\Promise\AlreadyResolvedPromise;
+use Kiboko\Component\Promise\DeferredInterface;
+use Kiboko\Component\Promise\FailedPromise;
+use Kiboko\Component\Promise\PromiseInterface;
+use Kiboko\Component\Promise\ResolvablePromiseInterface;
+use Kiboko\Component\Promise\SucceededPromise;
 use PhpSpec\ObjectBehavior;
 
 final class SucceededPromiseSpec extends ObjectBehavior
