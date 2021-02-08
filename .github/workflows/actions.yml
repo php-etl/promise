@@ -43,6 +43,6 @@ jobs:
                 with:
                     args: --prefer-dist
                     php_version: 8.0
-                    extension: xdebug
+                    extensions: xdebug
             -   name: PHP Spec
                 run: bin/phpspec run spec
