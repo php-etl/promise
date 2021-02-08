@@ -2,7 +2,15 @@
 
 namespace Kiboko\Component\Promise;
 
-use Kiboko\Component\Promise\Resolution;
+use Kiboko\Component\Promise\Resolution\Failure;
+use Kiboko\Component\Promise\Resolution\Pending;
+use Kiboko\Component\Promise\Resolution\Success;
+use Kiboko\Contract\Promise\DeferredInterface;
+use Kiboko\Contract\Promise\PromiseInterface;
+use Kiboko\Contract\Promise\Resolution\FailureInterface;
+use Kiboko\Contract\Promise\Resolution\ResolutionInterface;
+use Kiboko\Contract\Promise\Resolution\SuccessInterface;
+use Kiboko\Contract\Promise\ResolvablePromiseInterface;
 
 /**
  * @api
@@ -13,14 +21,13 @@ final class Promise implements ResolvablePromiseInterface
     private $successCallbacks;
     /** @var callable */
     private $failureCallbacks;
-    /** @var Resolution\ResolutionInterface */
-    private $resolution;
+    private ResolutionInterface $resolution;
 
     public function __construct()
     {
         $this->successCallbacks = [];
         $this->failureCallbacks = [];
-        $this->resolution = new Resolution\Pending();
+        $this->resolution = new Pending();
     }
 
     public function defer(): DeferredInterface
@@ -30,7 +37,7 @@ final class Promise implements ResolvablePromiseInterface
 
     public function then(callable $callback): PromiseInterface
     {
-        if ($this->resolution instanceof Resolution\SuccessInterface) {
+        if ($this->resolution instanceof SuccessInterface) {
             $callback($this->resolution->value());
         }
 
@@ -41,7 +48,7 @@ final class Promise implements ResolvablePromiseInterface
 
     public function failure(callable $callback): PromiseInterface
     {
-        if ($this->resolution instanceof Resolution\FailureInterface) {
+        if ($this->resolution instanceof FailureInterface) {
             $callback($this->resolution->error());
         }
 
@@ -52,11 +59,11 @@ final class Promise implements ResolvablePromiseInterface
 
     public function resolve($value): void
     {
-        if (!$this->resolution instanceof Resolution\Pending) {
+        if (!$this->resolution instanceof Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
-        $this->resolution = new Resolution\Success($value);
+        $this->resolution = new Success($value);
         foreach ($this->successCallbacks as $callback) {
             try {
                 $callback($value);
@@ -68,11 +75,11 @@ final class Promise implements ResolvablePromiseInterface
 
     public function fail(\Throwable $failure): void
     {
-        if (!$this->resolution instanceof Resolution\Pending) {
+        if (!$this->resolution instanceof Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
-        $this->resolution = new Resolution\Failure($failure);
+        $this->resolution = new Failure($failure);
         foreach ($this->failureCallbacks as $callback) {
             try {
                 $callback($failure);
@@ -84,20 +91,20 @@ final class Promise implements ResolvablePromiseInterface
 
     public function isResolved(): bool
     {
-        return !$this->resolution instanceof Resolution\Pending;
+        return !$this->resolution instanceof Pending;
     }
 
     public function isSuccess(): bool
     {
-        return $this->resolution instanceof Resolution\SuccessInterface;
+        return $this->resolution instanceof SuccessInterface;
     }
 
     public function isFailure(): bool
     {
-        return $this->resolution instanceof Resolution\FailureInterface;
+        return $this->resolution instanceof FailureInterface;
     }
 
-    public function resolution(): Resolution\ResolutionInterface
+    public function resolution(): ResolutionInterface
     {
         return $this->resolution;
     }

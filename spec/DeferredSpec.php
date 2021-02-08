@@ -3,9 +3,9 @@
 namespace spec\Kiboko\Component\Promise;
 
 use Kiboko\Component\Promise\Deferred;
-use Kiboko\Component\Promise\DeferredInterface;
 use Kiboko\Component\Promise\Promise;
-use Kiboko\Component\Promise\PromiseInterface;
+use Kiboko\Contract\Promise\DeferredInterface;
+use Kiboko\Contract\Promise\PromiseInterface;
 use PhpSpec\ObjectBehavior;
 
 final class DeferredSpec extends ObjectBehavior

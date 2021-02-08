@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\Promise\Resolution;
 
+use Kiboko\Contract\Promise\Resolution\ResolutionInterface;
+
 /**
  * @internal
  */

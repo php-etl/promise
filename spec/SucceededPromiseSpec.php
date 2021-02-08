@@ -2,12 +2,10 @@
 
 namespace spec\Kiboko\Component\Promise;
 
-use Kiboko\Component\Promise\AlreadyResolvedPromise;
-use Kiboko\Component\Promise\DeferredInterface;
-use Kiboko\Component\Promise\FailedPromise;
-use Kiboko\Component\Promise\PromiseInterface;
-use Kiboko\Component\Promise\ResolvablePromiseInterface;
 use Kiboko\Component\Promise\SucceededPromise;
+use Kiboko\Contract\Promise\DeferredInterface;
+use Kiboko\Contract\Promise\PromiseInterface;
+use Kiboko\Contract\Promise\ResolvablePromiseInterface;
 use PhpSpec\ObjectBehavior;
 
 final class SucceededPromiseSpec extends ObjectBehavior

@@ -15,7 +15,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "php-etl/promise-contracts": "0.1.x-dev"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -33,6 +34,9 @@
             "unit\\Kiboko\\Component\\Promise\\": "unit/",
             "functional\\Kiboko\\Component\\Promise\\": "functional/"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {

@@ -2,17 +2,15 @@
 
 namespace Kiboko\Component\Promise\Resolution;
 
+use Kiboko\Contract\Promise\Resolution\FailureInterface;
+
 /**
  * @internal
  */
 final class Failure implements FailureInterface
 {
-    /** @var \Throwable */
-    private $error;
-
-    public function __construct(\Throwable $error)
+    public function __construct(private \Throwable $error)
     {
-        $this->error = $error;
     }
 
     public function error(): \Throwable

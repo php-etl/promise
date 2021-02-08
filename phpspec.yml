@@ -1,17 +1,3 @@
-extensions:
-  LeanPHP\PhpSpec\CodeCoverage\CodeCoverageExtension:
-    format:
-      - html
-      - clover
-      - xml
-    output:
-      html: reports/phpspec-coverage-html
-      clover: reports/phpspec-coverage-clover/coverage.xml
-      xml: reports/phpspec-coverage-xml
-    blacklist:
-      - vendor
-    whitelist:
-      - src
 formatter.name: pretty
 stop_on_failure: true
 suites:

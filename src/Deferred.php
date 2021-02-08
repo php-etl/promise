@@ -2,17 +2,16 @@
 
 namespace Kiboko\Component\Promise;
 
+use Kiboko\Contract\Promise\DeferredInterface;
+use Kiboko\Contract\Promise\PromiseInterface;
+
 /**
  * @api
  */
 final class Deferred implements DeferredInterface
 {
-    /** @var PromiseInterface */
-    private $promise;
-
-    public function __construct(PromiseInterface $deferred)
+    public function __construct(private PromiseInterface $promise)
     {
-        $this->promise = $deferred;
     }
 
     /**

@@ -3,14 +3,17 @@
 namespace Kiboko\Component\Promise;
 
 use Kiboko\Component\Promise\Resolution;
+use Kiboko\Contract\Promise\DeferredInterface;
+use Kiboko\Contract\Promise\PromiseInterface;
+use Kiboko\Contract\Promise\Resolution\ResolutionInterface;
+use Kiboko\Contract\Promise\Resolution\SuccessInterface;
 
 /**
  * @api
  */
 final class SucceededPromise implements PromiseInterface
 {
-    /** @var Resolution\SuccessInterface */
-    private $resolution;
+    private SuccessInterface $resolution;
 
     public function __construct($value)
     {
@@ -48,7 +51,7 @@ final class SucceededPromise implements PromiseInterface
         return false;
     }
 
-    public function resolution(): Resolution\ResolutionInterface
+    public function resolution(): ResolutionInterface
     {
         return $this->resolution;
     }

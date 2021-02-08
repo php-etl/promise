@@ -2,16 +2,15 @@
 
 namespace Kiboko\Component\Promise\Resolution;
 
+use Kiboko\Contract\Promise\Resolution\SuccessInterface;
+
 /**
  * @internal
  */
 final class Success implements SuccessInterface
 {
-    private $value;
-
-    public function __construct($value)
+    public function __construct(private $value)
     {
-        $this->value = $value;
     }
 
     public function value()
