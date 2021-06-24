@@ -17,4 +17,11 @@ final class Failure implements FailureInterface
     {
         return $this->error;
     }
+
+    public function apply(callable $callback): void
+    {
+        if (($error = $callback($this->error)) !== null) {
+            $this->error = $error;
+        }
+    }
 }

@@ -2,15 +2,7 @@
 
 namespace Kiboko\Component\Promise;
 
-use Kiboko\Component\Promise\Resolution\Failure;
-use Kiboko\Component\Promise\Resolution\Pending;
-use Kiboko\Component\Promise\Resolution\Success;
-use Kiboko\Contract\Promise\DeferredInterface;
-use Kiboko\Contract\Promise\PromiseInterface;
-use Kiboko\Contract\Promise\Resolution\FailureInterface;
-use Kiboko\Contract\Promise\Resolution\ResolutionInterface;
-use Kiboko\Contract\Promise\Resolution\SuccessInterface;
-use Kiboko\Contract\Promise\ResolvablePromiseInterface;
+use Kiboko\Component\ETL\Promise\Resolution;
 
 /**
  * @api
@@ -21,13 +13,13 @@ final class Promise implements ResolvablePromiseInterface
     private $successCallbacks;
     /** @var callable */
     private $failureCallbacks;
-    private ResolutionInterface $resolution;
+    private Resolution\ResolutionInterface $resolution;
 
     public function __construct()
     {
         $this->successCallbacks = [];
         $this->failureCallbacks = [];
-        $this->resolution = new Pending();
+        $this->resolution = new Resolution\Pending();
     }
 
     public function defer(): DeferredInterface
@@ -38,7 +30,7 @@ final class Promise implements ResolvablePromiseInterface
     public function then(callable $callback): PromiseInterface
     {
         if ($this->resolution instanceof SuccessInterface) {
-            $callback($this->resolution->value());
+            $this->resolution->apply($callback);
         }
 
         $this->successCallbacks[] = $callback;
@@ -49,7 +41,7 @@ final class Promise implements ResolvablePromiseInterface
     public function failure(callable $callback): PromiseInterface
     {
         if ($this->resolution instanceof FailureInterface) {
-            $callback($this->resolution->error());
+            $this->resolution->apply($callback);
         }
 
         $this->failureCallbacks[] = $callback;
@@ -59,14 +51,14 @@ final class Promise implements ResolvablePromiseInterface
 
     public function resolve($value): void
     {
-        if (!$this->resolution instanceof Pending) {
+        if (!$this->resolution instanceof Resolution\Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
-        $this->resolution = new Success($value);
+        $this->resolution = new Resolution\Success($value);
         foreach ($this->successCallbacks as $callback) {
             try {
-                $callback($value);
+                $this->resolution->apply($callback);
             } catch (\Throwable $e) {
                 throw new \RuntimeException('A promise handler should not throw exceptions.', 0, $e);
             }
@@ -75,14 +67,14 @@ final class Promise implements ResolvablePromiseInterface
 
     public function fail(\Throwable $failure): void
     {
-        if (!$this->resolution instanceof Pending) {
+        if (!$this->resolution instanceof Resolution\Pending) {
             throw new AlreadyResolvedPromise('The promise was already resolved, cannot resolve again.');
         }
 
-        $this->resolution = new Failure($failure);
+        $this->resolution = new Resolution\Failure($failure);
         foreach ($this->failureCallbacks as $callback) {
             try {
-                $callback($failure);
+                $this->resolution->apply($callback);
             } catch (\Throwable $e) {
                 throw new \RuntimeException('A promise handler should not throw exceptions.', 0, $e);
             }
@@ -91,20 +83,20 @@ final class Promise implements ResolvablePromiseInterface
 
     public function isResolved(): bool
     {
-        return !$this->resolution instanceof Pending;
+        return !$this->resolution instanceof Resolution\Pending;
     }
 
     public function isSuccess(): bool
     {
-        return $this->resolution instanceof SuccessInterface;
+        return $this->resolution instanceof Resolution\SuccessInterface;
     }
 
     public function isFailure(): bool
     {
-        return $this->resolution instanceof FailureInterface;
+        return $this->resolution instanceof Resolution\FailureInterface;
     }
 
-    public function resolution(): ResolutionInterface
+    public function resolution(): Resolution\ResolutionInterface
     {
         return $this->resolution;
     }

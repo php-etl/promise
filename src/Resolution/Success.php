@@ -17,4 +17,11 @@ final class Success implements SuccessInterface
     {
         return $this->value;
     }
+
+    public function apply(callable $callback): void
+    {
+        if (($value = $callback($this->value)) !== null) {
+            $this->value = $value;
+        }
+    }
 }
