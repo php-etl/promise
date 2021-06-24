@@ -2,36 +2,32 @@
 
 namespace Kiboko\Component\Promise;
 
-use Kiboko\Component\Promise\Resolution\Failure;
-use Kiboko\Contract\Promise\DeferredInterface;
-use Kiboko\Contract\Promise\PromiseInterface;
-use Kiboko\Contract\Promise\Resolution\FailureInterface;
-use Kiboko\Contract\Promise\Resolution\ResolutionInterface;
+use Kiboko\Contract\Promise as Contract;
 
 /**
  * @api
  */
-final class FailedPromise implements PromiseInterface
+final class FailedPromise implements Contract\PromiseInterface
 {
-    private FailureInterface $resolution;
+    private Contract\Resolution\FailureInterface $resolution;
 
     public function __construct(\Throwable $exception)
     {
-        $this->resolution = new Failure($exception);
+        $this->resolution = new Resolution\Failure($exception);
     }
 
-    public function then(callable $callback): PromiseInterface
+    public function then(callable $callback): Contract\PromiseInterface
     {
         return $this;
     }
 
-    public function failure(callable $callback): PromiseInterface
+    public function failure(callable $callback): Contract\PromiseInterface
     {
-        $callback($this->resolution->error());
+        $this->resolution->apply($callback);
         return $this;
     }
 
-    public function defer(): DeferredInterface
+    public function defer(): Contract\DeferredInterface
     {
         return new Deferred($this);
     }
@@ -51,7 +47,7 @@ final class FailedPromise implements PromiseInterface
         return true;
     }
 
-    public function resolution(): ResolutionInterface
+    public function resolution(): Contract\Resolution\ResolutionInterface
     {
         return $this->resolution;
     }
