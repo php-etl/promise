@@ -2,35 +2,37 @@
 
 namespace Kiboko\Component\Promise;
 
-use Kiboko\Contract\Promise\DeferredInterface;
-use Kiboko\Contract\Promise\PromiseInterface;
+use Kiboko\Contract\Promise as Contract;
 
 /**
  * @api
+ * @template Type
+ * @implements Contract\DeferredInterface<Type>
  */
-final class Deferred implements DeferredInterface
+final class Deferred implements Contract\DeferredInterface
 {
-    public function __construct(private PromiseInterface $promise)
+    /** @param Contract\PromiseInterface<Type> $promise */
+    public function __construct(private Contract\PromiseInterface $promise)
     {
     }
 
     /**
-     * @param callable<mixed> $callback
+     * @param callable(Type): Type $callback
      *
-     * @return DeferredInterface
+     * @return Contract\DeferredInterface<Type>
      */
-    public function then(callable $callback): DeferredInterface
+    public function then(callable $callback): Contract\DeferredInterface
     {
         $this->promise->then($callback);
         return $this;
     }
 
     /**
-     * @param callable<\Throwable> $callback
+     * @param callable(\Throwable):\Throwable $callback
      *
-     * @return DeferredInterface
+     * @return Contract\DeferredInterface<Type>
      */
-    public function failure(callable $callback): DeferredInterface
+    public function failure(callable $callback): Contract\DeferredInterface
     {
         $this->promise->failure($callback);
         return $this;

@@ -6,12 +6,14 @@ use Kiboko\Contract\Promise as Contract;
 
 /**
  * @api
+ * @template Type
+ * @implements Contract\ResolvablePromiseInterface<Type>
  */
 final class Promise implements Contract\ResolvablePromiseInterface
 {
-    /** @var callable */
+    /** @var array<callable(Type): Type> */
     private $successCallbacks;
-    /** @var callable */
+    /** @var array<callable(\Throwable): \Throwable> */
     private $failureCallbacks;
     private Contract\Resolution\ResolutionInterface $resolution;
 
@@ -22,11 +24,11 @@ final class Promise implements Contract\ResolvablePromiseInterface
         $this->resolution = new Resolution\Pending();
     }
 
-    public function defer(): Contract\DeferredInterface
-    {
-        return new Deferred($this);
-    }
-
+    /**
+     * @param callable(Type): Type $callback
+     *
+     * @return Contract\PromiseInterface<Type>
+     */
     public function then(callable $callback): Contract\PromiseInterface
     {
         if ($this->resolution instanceof Contract\Resolution\SuccessInterface) {
@@ -38,6 +40,11 @@ final class Promise implements Contract\ResolvablePromiseInterface
         return $this;
     }
 
+    /**
+     * @param callable(\Throwable): \Throwable $callback
+     *
+     * @return Contract\PromiseInterface<Type>
+     */
     public function failure(callable $callback): Contract\PromiseInterface
     {
         if ($this->resolution instanceof Contract\Resolution\FailureInterface) {
@@ -47,6 +54,12 @@ final class Promise implements Contract\ResolvablePromiseInterface
         $this->failureCallbacks[] = $callback;
 
         return $this;
+    }
+
+    /** @return Contract\DeferredInterface<Type> */
+    public function defer(): Contract\DeferredInterface
+    {
+        return new Deferred($this);
     }
 
     public function resolve($value): void
