@@ -19,7 +19,6 @@
         "php-etl/promise-contracts": "^0.1.0"
     },
     "require-dev": {
-        "ext-xdebug": "*",
         "phpspec/phpspec": "8.0.x-dev",
         "phpunit/phpunit": "^9.0"
     },
