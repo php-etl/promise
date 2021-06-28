@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/promise-contracts.git",
-                "reference": "810165f8ff78d788e4aed36d02e375e06ab86dcb"
+                "reference": "2e04532bcb95896031bc51f18aa8a803df9ee6c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/promise-contracts/zipball/810165f8ff78d788e4aed36d02e375e06ab86dcb",
-                "reference": "810165f8ff78d788e4aed36d02e375e06ab86dcb",
+                "url": "https://api.github.com/repos/php-etl/promise-contracts/zipball/2e04532bcb95896031bc51f18aa8a803df9ee6c5",
+                "reference": "2e04532bcb95896031bc51f18aa8a803df9ee6c5",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 "issues": "https://github.com/php-etl/promise-contracts/issues",
                 "source": "https://github.com/php-etl/promise-contracts/tree/master"
             },
-            "time": "2021-06-26T09:04:59+00:00"
+            "time": "2021-06-28T20:30:41+00:00"
         }
     ],
     "packages-dev": [

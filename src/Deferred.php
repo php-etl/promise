@@ -6,20 +6,21 @@ use Kiboko\Contract\Promise as Contract;
 
 /**
  * @api
- * @template Type
- * @implements Contract\DeferredInterface<Type>
+ * @template ExpectationType
+ * @template ExceptionType of \Throwable
+ * @implements Contract\DeferredInterface<ExpectationType, ExceptionType>
  */
 final class Deferred implements Contract\DeferredInterface
 {
-    /** @param Contract\PromiseInterface<Type> $promise */
+    /** @param Contract\PromiseInterface<ExpectationType, ExceptionType> $promise */
     public function __construct(private Contract\PromiseInterface $promise)
     {
     }
 
     /**
-     * @param callable(Type): Type $callback
+     * @param callable(ExpectationType): void $callback
      *
-     * @return Contract\DeferredInterface<Type>
+     * @return Contract\DeferredInterface<ExpectationType, ExceptionType>
      */
     public function then(callable $callback): Contract\DeferredInterface
     {
@@ -28,9 +29,9 @@ final class Deferred implements Contract\DeferredInterface
     }
 
     /**
-     * @param callable(\Throwable):\Throwable $callback
+     * @param callable(ExceptionType): void $callback
      *
-     * @return Contract\DeferredInterface<Type>
+     * @return Contract\DeferredInterface<ExpectationType, ExceptionType>
      */
     public function failure(callable $callback): Contract\DeferredInterface
     {

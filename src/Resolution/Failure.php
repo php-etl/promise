@@ -2,26 +2,29 @@
 
 namespace Kiboko\Component\Promise\Resolution;
 
-use Kiboko\Contract\Promise\Resolution\FailureInterface;
+use Kiboko\Contract\Promise as Contract;
 
 /**
  * @internal
+ * @template Type of \Throwable
+ * @implements Contract\Resolution\FailureInterface<Type>
  */
-final class Failure implements FailureInterface
+final class Failure implements Contract\Resolution\FailureInterface
 {
+    /** @param Type $error */
     public function __construct(private \Throwable $error)
     {
     }
 
+    /** @return Type */
     public function error(): \Throwable
     {
         return $this->error;
     }
 
+    /** @var callable(Type): void */
     public function apply(callable $callback): void
     {
-        if (($error = $callback($this->error)) !== null) {
-            $this->error = $error;
-        }
+        $callback($this->error);
     }
 }

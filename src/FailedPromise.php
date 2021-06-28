@@ -6,22 +6,25 @@ use Kiboko\Contract\Promise as Contract;
 
 /**
  * @api
- * @template Type
- * @implements Contract\PromiseInterface<Type>
+ * @template ExpectationType
+ * @template ExceptionType of \Throwable
+ * @implements Contract\PromiseInterface<ExpectationType, ExceptionType>
  */
 final class FailedPromise implements Contract\PromiseInterface
 {
+    /** @var Contract\Resolution\FailureInterface<ExceptionType> */
     private Contract\Resolution\FailureInterface $resolution;
 
+    /** @param ExceptionType $exception */
     public function __construct(\Throwable $exception)
     {
         $this->resolution = new Resolution\Failure($exception);
     }
 
     /**
-     * @param callable(Type): Type $callback
+     * @param callable(ExpectationType): void $callback
      *
-     * @return Contract\PromiseInterface<Type>
+     * @return Contract\PromiseInterface<ExpectationType, ExceptionType>
      */
     public function then(callable $callback): Contract\PromiseInterface
     {
@@ -29,9 +32,9 @@ final class FailedPromise implements Contract\PromiseInterface
     }
 
     /**
-     * @param callable(\Throwable): \Throwable $callback
+     * @param callable(\Throwable): void $callback
      *
-     * @return Contract\PromiseInterface<Type>
+     * @return Contract\PromiseInterface<ExpectationType, ExceptionType>
      */
     public function failure(callable $callback): Contract\PromiseInterface
     {
@@ -39,10 +42,12 @@ final class FailedPromise implements Contract\PromiseInterface
         return $this;
     }
 
-    /** @return Contract\DeferredInterface<Type> */
+    /** @return Contract\DeferredInterface<ExpectationType, ExceptionType> */
     public function defer(): Contract\DeferredInterface
     {
-        return new Deferred($this);
+        /** @var Deferred<ExpectationType, ExceptionType> $deferred */
+        $deferred = new Deferred($this);
+        return $deferred;
     }
 
     public function isResolved(): bool
@@ -60,6 +65,7 @@ final class FailedPromise implements Contract\PromiseInterface
         return true;
     }
 
+    /** @return Contract\Resolution\ResolutionInterface|Contract\Resolution\ResolvedInterface<ExceptionType> */
     public function resolution(): Contract\Resolution\ResolutionInterface
     {
         return $this->resolution;
